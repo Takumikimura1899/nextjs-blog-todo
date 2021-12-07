@@ -16,18 +16,19 @@ export async function getAllPostIds() {
   );
   const posts = await res.json();
   return posts.map((post: { id: string }) => {
+    const id = post.id.toString();
     return {
       params: {
-        id: post.id,
+        id,
       },
     };
   });
 }
 
-export async function getPostData(id: string) {
+export async function getPostData(id: string | number) {
   const res = await fetch(
     new URL(
-      `${process.env.NEXT_PUBLIC_RESTAPI_URL}apo/detail-post/{id}/`
+      `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/detail-post/${id}/`
     ).toString()
   );
   const post = await res.json();

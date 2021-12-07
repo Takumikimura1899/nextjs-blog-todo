@@ -1,5 +1,8 @@
+import React from 'react';
+import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ParsedUrlQuery } from 'querystring';
 import { Layout } from '../../components/Layout';
 import { getAllPostIds, getPostData } from '../../lib/posts';
 
@@ -12,9 +15,9 @@ interface PostProps {
   };
 }
 
-export default function Post({ post }: PostProps) {
+const Post: React.FC<PostProps> = ({ post }) => {
   const router = useRouter();
-  if (!post) {
+  if (router.isFallback || !post) {
     return <div>Loading...</div>;
   }
   return (
@@ -47,4 +50,30 @@ export default function Post({ post }: PostProps) {
       </Link>
     </Layout>
   );
+};
+
+export async function getStaticPaths() {
+  const paths: string = await getAllPostIds();
+  return {
+    paths,
+    fallback: true,
+  };
 }
+
+interface Params extends ParsedUrlQuery {
+  id: string;
+}
+
+export const getStaticProps: GetStaticProps<PostProps, Params> = async ({
+  params,
+}) => {
+  const { post } = await getPostData(params!.id);
+  return {
+    props: {
+      post,
+    },
+    revalidate: 3,
+  };
+};
+
+export default Post;
