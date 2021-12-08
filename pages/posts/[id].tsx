@@ -5,17 +5,9 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { Layout } from '../../components/Layout';
 import { getAllPostIds, getPostData } from '../../lib/posts';
+import { PropsPost } from '../../components/Post';
 
-interface PostProps {
-  post: {
-    title: string;
-    id: string;
-    created_at: string;
-    content: string;
-  };
-}
-
-const Post: React.FC<PostProps> = ({ post }) => {
+const Post: React.FC<PropsPost> = ({ post }) => {
   const router = useRouter();
   if (router.isFallback || !post) {
     return <div>Loading...</div>;
@@ -64,7 +56,7 @@ interface Params extends ParsedUrlQuery {
   id: string;
 }
 
-export const getStaticProps: GetStaticProps<PostProps, Params> = async ({
+export const getStaticProps: GetStaticProps<PropsPost, Params> = async ({
   params,
 }) => {
   const { post } = await getPostData(params!.id);

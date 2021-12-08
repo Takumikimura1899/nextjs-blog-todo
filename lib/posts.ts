@@ -1,10 +1,17 @@
+type Post = {
+  id: string;
+  title: string;
+  created_at: string;
+  content: string;
+};
+
 export async function getAllPostsData() {
   const res = await fetch(
     new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/list-post/`).toString()
   );
   const posts = await res.json();
   const filteredPosts = posts.sort(
-    (a: any, b: any) =>
+    (a: Post, b: Post) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
   return filteredPosts;
@@ -15,7 +22,7 @@ export async function getAllPostIds() {
     new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/list-post/`).toString()
   );
   const posts = await res.json();
-  return posts.map((post: { id: string }) => {
+  return posts.map((post: Post) => {
     const id = post.id.toString();
     return {
       params: {

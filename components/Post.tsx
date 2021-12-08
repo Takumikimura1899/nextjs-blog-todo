@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import React from 'react';
 
-interface PropsPost {
+export interface PropsPost {
   post: {
     id: string;
     title: string;
+    created_at: string;
+    content: string;
   };
 }
 
