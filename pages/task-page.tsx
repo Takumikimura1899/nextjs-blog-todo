@@ -2,20 +2,41 @@ import { Layout } from '../components/Layout';
 import Link from 'next/link';
 import { getAllTasksData } from '../lib/tasks';
 import { Task } from '../components/Task';
+import useSWR from 'swr';
+import { useEffect } from 'react';
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const apiUrl = `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/list-task/`;
+
+type StaticFilteredTask = {
+  id: string;
+  title: string;
+  created_at: string;
+};
 interface StaticFilteredTasks {
-  staticFilteredTasks: {
-    id: string;
-    title: string;
-  }[];
+  staticFilteredTasks: StaticFilteredTask[];
 }
 
 const TaskPage: React.FC<StaticFilteredTasks> = ({ staticFilteredTasks }) => {
+  const { data: tasks, mutate } = useSWR<StaticFilteredTask[]>(
+    apiUrl,
+    fetcher,
+    {
+      fallbackData: staticFilteredTasks,
+    }
+  );
+  const filteredTasks = tasks?.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+  useEffect(() => {
+    mutate();
+  }, [mutate]);
   return (
     <Layout title='Task Page'>
       <ul>
-        {staticFilteredTasks &&
-          staticFilteredTasks.map((task) => <Task key={task.id} task={task} />)}
+        {filteredTasks &&
+          filteredTasks.map((task) => <Task key={task.id} task={task} />)}
       </ul>
       <Link href='/main-page' passHref>
         <div className='flex cursor-pointer mt-12'>
