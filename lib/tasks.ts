@@ -1,7 +1,7 @@
-type Tasks = {
+export interface Tasks {
   id: string;
   created_at: string;
-};
+}
 
 export const getAllTasksData = async () => {
   const res = await fetch(
