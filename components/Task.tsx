@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tasks } from '../lib/tasks';
+import Link from 'next/link';
 
 export interface PropsTask {
   task: {
@@ -13,9 +13,11 @@ export const Task: React.FC<PropsTask> = ({ task }) => {
     <div>
       <span>{task.id}</span>
       {' : '}
-      <span className='cursor-pointer text-white border-b border-gray-500 hover:bg-gray-600'>
-        {task.title}
-      </span>
+      <Link href={`/tasks/${task.id}`} passHref>
+        <span className='cursor-pointer text-white border-b border-gray-500 hover:bg-gray-600'>
+          {task.title}
+        </span>
+      </Link>
     </div>
   );
 };
