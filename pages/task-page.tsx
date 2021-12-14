@@ -36,7 +36,9 @@ const TaskPage: React.FC<StaticFilteredTasks> = ({ staticFilteredTasks }) => {
     <Layout title='Task Page'>
       <ul>
         {filteredTasks &&
-          filteredTasks.map((task) => <Task key={task.id} task={task} />)}
+          filteredTasks.map((task) => (
+            <Task key={task.id} task={task} taskDeleted={mutate} />
+          ))}
       </ul>
       <Link href='/main-page' passHref>
         <div className='flex cursor-pointer mt-12'>
