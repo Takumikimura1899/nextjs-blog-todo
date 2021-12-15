@@ -5,12 +5,12 @@ type Task = {
   title: string;
 };
 
-interface ContextInterface {
+export interface TaskContextInterface {
   selectedTask: Task;
   setSelectedTask: Dispatch<SetStateAction<Task>>;
 }
 
-export const StateContext = createContext<ContextInterface | undefined>(
+export const StateContext = createContext<TaskContextInterface | undefined>(
   undefined
 );
 

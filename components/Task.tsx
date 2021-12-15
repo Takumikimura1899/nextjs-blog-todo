@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { SetStateAction, useContext } from 'react';
 import Link from 'next/link';
 import Cookie from 'universal-cookie';
+import { StateContext, TaskContextInterface } from '../context/StateContext';
 
 const cookie = new Cookie();
 
 export interface PropsTask {
   task: {
-    id: string;
+    id: number;
     title: string;
   };
   taskDeleted: any;
 }
 
 export const Task: React.FC<PropsTask> = ({ task, taskDeleted }) => {
+  const { setSelectedTask } = useContext(StateContext)!;
   const deleteTask = async () => {
     await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/tasks/${task.id}`, {
       method: 'DELETE',
@@ -37,6 +39,21 @@ export const Task: React.FC<PropsTask> = ({ task, taskDeleted }) => {
         </span>
       </Link>
       <div className='float-right ml-20'>
+        <svg
+          onClick={() => setSelectedTask(task)}
+          xmlns='http://www.w3.org/2000/svg'
+          className='h-6 w-6 float-left cursor-pointer'
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth={2}
+            d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
+          />
+        </svg>
         <svg
           onClick={deleteTask}
           xmlns='http://www.w3.org/2000/svg'
