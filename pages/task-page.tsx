@@ -5,6 +5,7 @@ import { Task } from '../components/Task';
 import useSWR from 'swr';
 import { useEffect } from 'react';
 import StateContextProvider from '../context/StateContext';
+import { TaskForm } from '../components/TaskForm';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const apiUrl = `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/list-task/`;
@@ -36,6 +37,7 @@ const TaskPage: React.FC<StaticFilteredTasks> = ({ staticFilteredTasks }) => {
   return (
     <StateContextProvider>
       <Layout title='Task Page'>
+        <TaskForm taskCreated={mutate} />
         <ul>
           {filteredTasks &&
             filteredTasks.map((task) => (
@@ -69,6 +71,7 @@ export const getStaticProps = async () => {
 
   return {
     props: { staticFilteredTasks },
+    revalidate: 3,
   };
 };
 
